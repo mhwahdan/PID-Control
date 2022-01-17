@@ -66,6 +66,7 @@ void setup() {
 void loop() {
   float RPM;
   float angle;
+  double input;
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE){
     angle = motor->getAngle();
     RPM = motor->getRPM();

@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numerical root finder</title>
+    <title>PID control server</title>
     <link rel="stylesheet" href="{% static 'Bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'Bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'plotly/plotly-2.6.3.min.js' %}"></script>
     <script src="{% static 'Jquery/jquery-3.6.0.min.js' %}"></script>
+    <!-- roundSlider CSS -->
+    <link rel="stylesheet" href="{% static 'roundslider/css/roundslider.min.css' %}">
+    <!-- roundSlider JS -->
+    <script src="{% static 'roundslider/js/roundslider.min.js' %}"></script>
 </head>
 <body style="min-height: 100vh;">
 {% include 'PID/header.html' %}
