@@ -14,7 +14,7 @@ public:
   int ppr;
   Motor(int in1, int in2, int ppr);
   ~Motor();
-  int setMotor(int power, char direction);
+  int setMotor(int power);
   int stopMotor();
   float updateRPM(int increment);
   float updateAngle(int increment);

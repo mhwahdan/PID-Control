@@ -9,7 +9,6 @@
 #define PWM 6 //PWN pin for voltage magnitude control
 #define IN1 5 //Direction control pin 1
 #define IN2 6 //Direction control pin 2
-#define MODE 1 //0 -> speed control | 1 -> direction control
 #define PPR 388
 /*
 Approximate motor + Gear box Pulses per rotation = 388 pulses making the
@@ -29,26 +28,39 @@ float kp;
 float ki;
 float kd;
 double Setpoint;
-//displacment control
-double angle = 180;
+
 PIDController PID;
 Motor* motor; //motor to be controlled by PID algorithm
-
+int mode = 0;
 void setup() {
-    kp = 10;
-    ki = 5;
-    kd = 2;
-    Setpoint = 100;//angle / 360 * PPR;
+    motor = new Motor( IN1, IN2, PPR);
+    Serial.begin(115200);
+    while (Serial.available() == 0);
+    mode = Serial.readString().toInt();
+    Serial.println("Enter Setpoint");
+    while (Serial.available() == 0);
+    Setpoint = Serial.readString().toDouble();
+    if(mode == 2)
+      Setpoint = Setpoint / 360 * motor->ppr;
+    Serial.println("Enter KP");
+    while (Serial.available() == 0);
+    kp = Serial.readString().toDouble();
+    Serial.println("Enter KI");
+    while (Serial.available() == 0);
+    ki = Serial.readString().toDouble();
+    Serial.println("Enter KD");
+    while (Serial.available() == 0);
+    kd = Serial.readString().toDouble();
+    //Setpoint = 100;//angle / 360 * PPR;
     pinMode(ENCA,INPUT);
     pinMode(ENCB,INPUT);
     PID.begin();
-    PID.tune(20, 5, 1);
+    PID.tune(kp, ki, kd);
     PID.limit(-255, 255);
     PID.setpoint(Setpoint);
     attachInterrupt(digitalPinToInterrupt(ENCA), Calculate_paramters,RISING);
     // put your setup code here, to run once:
-    Serial.begin(115200);
-    motor = new Motor( IN1, IN2, PPR);
+    motor->setMotor(50);
 }
 
 void loop() {
@@ -58,28 +70,17 @@ void loop() {
     angle = motor->getAngle();
     RPM = motor->getRPM();
   }
-  Serial.print(RPM);
+  Serial.print(mode == 2? angle : RPM);
   Serial.println();
 }
 
 void Calculate_paramters(){
   // Read encoder B when ENCA rises
   int b = digitalRead(ENCB);
-  int increment = 0;
-  if(b>0){
-    // If B is high, increment forward
-    increment = 1;
-  }
-  else{
-    // Otherwise, increment backward
-    increment = -1;
-  }
+  int increment = (b > 0? 1:-1);
   motor->updateAngle(increment);
   motor->updateRPM(increment);
   // Compute velocity with method 2
-  vcc =PID.compute(motor->getRPM());
-  char d = 'A';
-  if(vcc < 0)
-    d = 'C';
-  motor->setMotor(vcc, d);
+  vcc =PID.compute(mode == 2? motor->getAngle() : motor->getRPM());
+  motor->setMotor(vcc);
 }

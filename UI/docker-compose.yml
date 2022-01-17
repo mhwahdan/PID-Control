@@ -1,0 +1,14 @@
+services:
+  camserver:
+    build:
+      context: .
+      dockerfile: camsystem.dockerfile
+    command: python3 -u server.py
+    volumes:
+      - ./codes/flask_server:/home/camserver
+    ports:
+      - 4100:4100/udp
+      - 4200:4200/udp
+      - 80:5000/tcp
+      - 5000:8554
+      - 6000:8888

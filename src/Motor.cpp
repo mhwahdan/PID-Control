@@ -13,7 +13,7 @@ Motor::Motor(int in1, int in2, int ppr)
   pinMode(this->in1,OUTPUT);
   pinMode(this->in2,OUTPUT);
   digitalWrite(this->in1,LOW);
-  digitalWrite(this->in2,HIGH);
+  digitalWrite(this->in2,LOW);
   return;
 }
 
@@ -24,15 +24,14 @@ Motor::~Motor()
 }
 
 
-int Motor::setMotor(int power, char direction){
-  if(direction == 'c' || direction == 'C'){
-    analogWrite(this->in1,power);
+int Motor::setMotor(int power){
+  if(power < 0){
+    analogWrite(this->in1, abs(power));
     digitalWrite(this->in2,LOW);
+    return 1;
   }
-  else if(direction == 'a' || direction == 'A'){
-    digitalWrite(this->in1,LOW);
-    analogWrite(this->in2,power);
-  }
+  digitalWrite(this->in1,LOW);
+  analogWrite(this->in2, power);
   return 1;  
 }
 
