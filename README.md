@@ -112,7 +112,9 @@ Django is a Python-based free and open-source web framework that follows the mod
 
 # how the program works :-
 - the user enters the system paramters from the gui and click start motor.
-
+<p align="center">
+<img src="https://github.com/mhwahdan/PID-Control/blob/main/UI.png">
+</p>
 
 # what is next :-
 
