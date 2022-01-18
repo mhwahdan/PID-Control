@@ -121,3 +121,10 @@ Django is a Python-based free and open-source web framework that follows the mod
 - create a simulation for the motor using simulink.
 - train an AI model that can predict the system tuning parameters of that particular motor given the setpoint.
 - use the trained model to fine tune the system tuning paramters given the setpoint only to remove the neccesity of maually inserting the tuning paramters.
+
+# Licence and contribution
+
+This repository has MIT licence
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project was under the supervision of DR.Emam Fathi Mohamed in the arab academy for science technology and maritime university
