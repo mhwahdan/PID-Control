@@ -23,10 +23,6 @@ Constraints :-
 
 void Calculate_paramters();
 double vcc;
-float v;
-float kp;
-float ki;
-float kd;
 double Setpoint;
 
 PIDController PID;
@@ -42,20 +38,12 @@ void setup() {
     Setpoint = Serial.readString().toDouble();
     if(mode == 2)
       Setpoint = Setpoint / 360 * motor->ppr;
-    Serial.println("Enter KP");
-    while (Serial.available() == 0);
-    kp = Serial.readString().toDouble();
-    Serial.println("Enter KI");
-    while (Serial.available() == 0);
-    ki = Serial.readString().toDouble();
-    Serial.println("Enter KD");
-    while (Serial.available() == 0);
-    kd = Serial.readString().toDouble();
-    //Setpoint = 100;//angle / 360 * PPR;
     pinMode(ENCA,INPUT);
     pinMode(ENCB,INPUT);
     PID.begin();
-    PID.tune(kp, ki, kd);
+    PID.tune((mode == 2) ? 6.0 : 15.0,
+     (mode == 2) ? 0.7 : 5.0,
+      1);
     PID.limit(-255, 255);
     PID.setpoint(Setpoint);
     attachInterrupt(digitalPinToInterrupt(ENCA), Calculate_paramters,RISING);
@@ -71,8 +59,11 @@ void loop() {
     angle = motor->getAngle();
     RPM = motor->getRPM();
   }
+  Serial.print(Setpoint);
+  Serial.print(" ");
   Serial.print(mode == 2? angle : RPM);
   Serial.println();
+  delay(5);
 }
 
 void Calculate_paramters(){
